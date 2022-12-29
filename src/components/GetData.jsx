@@ -6,7 +6,7 @@ const GetData = () => {
   const [users, setUsers] = useState(null);
 
   useEffect(() => {
-    axios('http://localhost:8080/api/users')
+    axios.get('http://localhost:8080/api/users')
       .then((response) => {
         setUsers(response.data);
       })
