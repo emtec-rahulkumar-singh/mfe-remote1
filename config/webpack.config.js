@@ -24,7 +24,7 @@ module.exports = {
     rules: [
       // JavaScript: Use Babel to transpile JavaScript files
       {
-        test: /\.?js$/,
+        test: /\.?js|jsx$/,
         exclude: /node_modules/,
         use: {
           loader: "babel-loader",
@@ -32,7 +32,26 @@ module.exports = {
             presets: ["@babel/preset-env", "@babel/preset-react"],
           },
         },
-      }
+      },
+      {
+        test: /\.(s[ac]ss)$/i,
+        include: [paths.src],
+        use: [
+          {
+            loader: 'style-loader',
+          },
+          'css-loader',
+          {
+            loader: 'postcss-loader',
+            options: {
+              postcssOptions: {
+                ident: 'postcss',
+              },
+            },
+          },
+          'sass-loader',
+        ],
+      },
     ],
   },
 
@@ -42,9 +61,10 @@ module.exports = {
       name: 'remote',
       filename: 'remoteEntry.js',
       exposes: {
-        './App': './src/App.js',
+        './App': './src/App.jsx',
       },
       shared: {
+        ...deps,
         react: {
           singleton: true,
           requiredVersion: deps.react,
